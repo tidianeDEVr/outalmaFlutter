@@ -6,3 +6,4 @@ const Color outalmaBackground = Color.fromARGB(255, 245, 245, 245);
 const Color outalmaBackgroundModal = Color.fromARGB(255, 233, 233, 233);
 const Color outalmaGreyTitle = Color.fromARGB(255, 112, 112, 112);
 const Color outalmaGreyBorder = Color.fromARGB(255, 222, 222, 222);
+const Color outalmaTileBackground = Color.fromARGB(255, 250, 250, 250);

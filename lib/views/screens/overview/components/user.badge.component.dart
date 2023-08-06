@@ -21,10 +21,14 @@ class _UserBadgeComponentState extends State<UserBadgeComponent> {
         height: 52,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(30),
-          color: Colors.white,
+          color: outalmaTileBackground,
+          border: Border.all(
+            width: 2,
+            color: Colors.white,
+          ),
           boxShadow: [
             BoxShadow(
-              color: Colors.grey.withOpacity(0.3),
+              color: Colors.grey.withOpacity(0.15),
               spreadRadius: 2,
               blurRadius: 7,
               offset: const Offset(0, 3), // changes position of shadow
@@ -32,8 +36,8 @@ class _UserBadgeComponentState extends State<UserBadgeComponent> {
           ],
         ),
         padding: const EdgeInsets.only(
-          left: 8,
-          right: 8,
+          left: 5,
+          right: 5,
           top: 2,
           bottom: 2,
         ),
@@ -77,11 +81,6 @@ class _UserBadgeComponentState extends State<UserBadgeComponent> {
                 color: Colors.black,
               ),
             ),
-            // IconButton(
-            //   onPressed: () => _displayBottomSheet(context),
-            //   icon: const Icon(Icons.keyboard_arrow_down_outlined),
-            //   color: Colors.black,
-            // )
           ],
         ),
       ),

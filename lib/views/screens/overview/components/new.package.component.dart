@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:outalma/views/screens/overview/components/modal.package.component.dart';
+import 'package:outalma/views/screens/overview/components/modal.new.package.component.dart';
 import 'package:outalma/views/shared/components/outalma.blue.logo.dart';
 import 'package:outalma/views/shared/components/outalma.white.logo.dart';
 
@@ -77,7 +77,9 @@ class _NewPackageComponentState extends State<NewPackageComponent> {
                       ),
                       child: Column(
                         children: [
-                          SvgPicture.asset("lib/assets/images/airplane.svg"),
+                          SvgPicture.asset(
+                            "lib/assets/images/airplane.svg",
+                          ),
                           Container(
                             margin: const EdgeInsets.only(top: 10, bottom: 10),
                             child: const Divider(
@@ -204,6 +206,7 @@ class _NewPackageComponentState extends State<NewPackageComponent> {
     if (selectedDeliveryMethod == "") return;
     showModalBottomSheet(
       context: context,
+      backgroundColor: outalmaBackgroundModal,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(
           top: Radius.circular(20),
@@ -215,6 +218,10 @@ class _NewPackageComponentState extends State<NewPackageComponent> {
 
   _selectDeliveryMethod(String method) {
     setState(() {
+      if (method == selectedDeliveryMethod) {
+        selectedDeliveryMethod = "";
+        return;
+      }
       selectedDeliveryMethod = method;
     });
   }

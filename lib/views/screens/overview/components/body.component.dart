@@ -12,6 +12,7 @@ class Body extends StatelessWidget {
       child: Container(
         color: outalmaBackground,
         width: double.infinity,
+        height: double.infinity,
         child: const SingleChildScrollView(
           child: Column(
             children: [

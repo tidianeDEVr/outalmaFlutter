@@ -25,7 +25,7 @@ class SavedPackagesComponent extends StatelessWidget {
             ),
           ),
           SizedBox(
-            height: 200,
+            height: (85 * fixturesPackages.length).toDouble(),
             child: ListView.builder(
               itemCount: fixturesPackages.length,
               itemBuilder: (context, index) => SinglePackageTile(
@@ -59,7 +59,7 @@ class SinglePackageTile extends StatelessWidget {
         right: 20,
       ),
       decoration: BoxDecoration(
-        color: outalmaBackground,
+        color: outalmaTileBackground,
         border: Border.all(
           width: 2,
           color: Colors.white,

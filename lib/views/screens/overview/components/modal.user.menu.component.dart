@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:outalma/utils/outalma.config.dart';
 
 class ModalUserMenuComponent extends StatefulWidget {
   const ModalUserMenuComponent({super.key});
@@ -27,10 +28,14 @@ class _ModalUserMenuComponentState extends State<ModalUserMenuComponent> {
           ),
           Container(
             height: 60,
-            padding: const EdgeInsets.only(left: 12, top: 4, bottom: 4),
+            padding: const EdgeInsets.only(left: 10, top: 4, bottom: 4),
             margin: const EdgeInsets.only(top: 20, bottom: 15),
             decoration: BoxDecoration(
-              color: Colors.white,
+              color: outalmaTileBackground,
+              border: Border.all(
+                width: 2,
+                color: Colors.white,
+              ),
               borderRadius: BorderRadius.circular(50),
               boxShadow: [
                 BoxShadow(
@@ -79,7 +84,11 @@ class _ModalUserMenuComponentState extends State<ModalUserMenuComponent> {
             padding: const EdgeInsets.only(left: 20, top: 4, bottom: 4),
             margin: const EdgeInsets.only(bottom: 15),
             decoration: BoxDecoration(
-              color: Colors.white,
+              color: outalmaTileBackground,
+              border: Border.all(
+                width: 2,
+                color: Colors.white,
+              ),
               borderRadius: BorderRadius.circular(50),
               boxShadow: [
                 BoxShadow(
@@ -128,7 +137,11 @@ class _ModalUserMenuComponentState extends State<ModalUserMenuComponent> {
             padding: const EdgeInsets.only(left: 20, top: 4, bottom: 4),
             margin: const EdgeInsets.only(bottom: 15),
             decoration: BoxDecoration(
-              color: Colors.white,
+              color: outalmaTileBackground,
+              border: Border.all(
+                width: 2,
+                color: Colors.white,
+              ),
               borderRadius: BorderRadius.circular(50),
               boxShadow: [
                 BoxShadow(
