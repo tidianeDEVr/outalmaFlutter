@@ -172,6 +172,23 @@ class _ModalUserMenuComponentState extends State<ModalUserMenuComponent> {
                         ),
                       ),
                     ),
+                    Container(
+                      width: 18,
+                      height: 18,
+                      margin: const EdgeInsets.only(left: 10),
+                      decoration: BoxDecoration(
+                          color: Colors.red,
+                          borderRadius: BorderRadius.circular(50)),
+                      child: const Center(
+                          child: Text(
+                        "1",
+                        style: TextStyle(
+                          fontWeight: FontWeight.w700,
+                          color: Colors.white,
+                          fontSize: 12,
+                        ),
+                      )),
+                    )
                   ],
                 ),
                 Container(
