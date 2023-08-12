@@ -23,3 +23,10 @@ class Country {
     return name;
   }
 }
+
+class TypeShipment {
+  String title;
+  String subtitle;
+
+  TypeShipment(this.title, this.subtitle);
+}

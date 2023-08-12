@@ -8,12 +8,12 @@ class Body extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Container(
-        color: outalmaBackground,
-        width: double.infinity,
-        height: double.infinity,
-        child: const SingleChildScrollView(
+    return Container(
+      color: outalmaBackground,
+      width: double.infinity,
+      height: double.infinity,
+      child: const SafeArea(
+        child: SingleChildScrollView(
           child: Column(
             children: [
               NewPackageComponent(),

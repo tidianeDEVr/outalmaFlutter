@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:outalma/views/screens/overview/components/modal.new.package.component.dart';
 import 'package:outalma/views/shared/components/outalma.blue.logo.dart';
 import 'package:outalma/views/shared/components/outalma.white.logo.dart';
@@ -77,20 +76,14 @@ class _NewPackageComponentState extends State<NewPackageComponent> {
                       ),
                       child: Column(
                         children: [
-                          SvgPicture.asset(
-                            "lib/assets/images/airplane.svg",
-                          ),
+                          // Image.asset("lib/assets/images/plane.gif"),
                           Container(
-                            margin: const EdgeInsets.only(top: 10, bottom: 10),
-                            child: const Divider(
-                              color: Colors.grey,
-                              thickness: .5,
+                            margin: const EdgeInsets.only(top: 10),
+                            child: const Text(
+                              'Par avion',
+                              style: TextStyle(
+                                  fontWeight: FontWeight.w700, fontSize: 17),
                             ),
-                          ),
-                          const Text(
-                            'Par avion',
-                            style: TextStyle(
-                                fontWeight: FontWeight.w700, fontSize: 17),
                           ),
                         ],
                       ),
@@ -129,18 +122,14 @@ class _NewPackageComponentState extends State<NewPackageComponent> {
                       ),
                       child: Column(
                         children: [
-                          SvgPicture.asset("lib/assets/images/boat.svg"),
+                          // Image.asset("lib/assets/images/boat.gif"),
                           Container(
-                            margin: const EdgeInsets.only(top: 10, bottom: 10),
-                            child: const Divider(
-                              color: Colors.grey,
-                              thickness: .5,
+                            margin: const EdgeInsets.only(top: 10),
+                            child: const Text(
+                              'Par bateau',
+                              style: TextStyle(
+                                  fontWeight: FontWeight.w700, fontSize: 17),
                             ),
-                          ),
-                          const Text(
-                            'Par bateau',
-                            style: TextStyle(
-                                fontWeight: FontWeight.w700, fontSize: 17),
                           ),
                         ],
                       ),
