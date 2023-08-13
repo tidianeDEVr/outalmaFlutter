@@ -74,7 +74,7 @@ class _ModalNewPackageComponentState extends State<ModalPackageComponent> {
                   Container(
                     width: 250,
                     margin: const EdgeInsets.only(bottom: 30),
-                    child: actualStep == 3
+                    child: actualStep >= 3
                         ? Container()
                         : Stack(
                             children: <Widget>[
@@ -114,7 +114,9 @@ class _ModalNewPackageComponentState extends State<ModalPackageComponent> {
                           callbackFunction: _selectTypeShipment)
                       : Container(),
                   actualStep == 2 ? const WeightsAndDimensions() : Container(),
-                  actualStep == 3 ? const CommandResume() : Container(),
+                  actualStep >= 3
+                      ? CommandResume(step: actualStep)
+                      : Container(),
                 ],
               ),
               Visibility(
@@ -125,17 +127,38 @@ class _ModalNewPackageComponentState extends State<ModalPackageComponent> {
                       actualStep = actualStep + 1;
                       return;
                     }
-                    // Navigator.pop(context);
+                    if (actualStep == 3) {
+                      _displayLoadingDialog();
+                      Future.delayed(const Duration(seconds: 5), () {
+                        Navigator.pop(context);
+                        setState(() {
+                          actualStep++;
+                        });
+                      });
+                    }
                   }),
-                  child: actualStep == 3
-                      ? const NextButton(libelle: 'Calculer')
-                      : const NextButton(libelle: 'Suivant'),
+                  child: Column(
+                    children: [
+                      actualStep == 3
+                          ? const NextButton(libelle: 'Calculer')
+                          : const NextButton(libelle: 'Suivant'),
+                    ],
+                  ),
                 ),
-              )
+              ),
             ],
           ),
         ],
       ),
+    );
+  }
+
+  Future _displayLoadingDialog() async {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return const Center(child: CircularProgressIndicator());
+      },
     );
   }
 
@@ -685,24 +708,40 @@ class WeightsAndDimensions extends StatelessWidget {
   }
 }
 
-class CommandResume extends StatelessWidget {
-  const CommandResume({super.key});
+class CommandResume extends StatefulWidget {
+  final int step;
+  const CommandResume({super.key, required this.step});
 
+  @override
+  State<CommandResume> createState() => _CommandResumeState();
+}
+
+class _CommandResumeState extends State<CommandResume> {
   @override
   Widget build(BuildContext context) {
     return Container(
       margin: const EdgeInsets.only(left: 20, right: 20),
       child: Column(
         children: [
-          const Text(
-            'Résumé de votre commande',
-            style: TextStyle(
-              fontSize: 14,
-              fontWeight: FontWeight.w700,
-              color: outalmaGreyTitle,
-              fontStyle: FontStyle.italic,
-            ),
-          ),
+          actualStep == 3
+              ? const Text(
+                  'Résumé de votre commande',
+                  style: TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w700,
+                    color: outalmaGreyTitle,
+                    fontStyle: FontStyle.italic,
+                  ),
+                )
+              : const Text(
+                  'Votre devis',
+                  style: TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w700,
+                    color: outalmaGreyTitle,
+                    fontStyle: FontStyle.italic,
+                  ),
+                ),
           Column(
             children: [
               Container(
@@ -712,7 +751,7 @@ class CommandResume extends StatelessWidget {
                       color: Colors.grey.withOpacity(0.3),
                       spreadRadius: 2,
                       blurRadius: 7,
-                      offset: const Offset(0, 3), // changes position of shadow
+                      offset: const Offset(0, 3),
                     ),
                   ],
                   color: outalmaYellow,
@@ -725,7 +764,7 @@ class CommandResume extends StatelessWidget {
                     topRight: Radius.circular(20),
                   ),
                 ),
-                margin: const EdgeInsets.only(top: 20),
+                margin: const EdgeInsets.only(top: 10),
                 padding: const EdgeInsets.only(
                     left: 20, right: 20, top: 5, bottom: 5),
                 child: Row(
@@ -739,18 +778,19 @@ class CommandResume extends StatelessWidget {
                             padding: const EdgeInsets.only(left: 10),
                             child: RichText(
                               text: TextSpan(
-                                  text: 'Fret aérien \n',
-                                  style: const TextStyle(
-                                      color: Colors.black,
-                                      fontWeight: FontWeight.w700),
-                                  children: [
-                                    TextSpan(
-                                      text: selectedTypeShipment.title,
-                                      style: const TextStyle(
-                                          color: Colors.black,
-                                          fontWeight: FontWeight.w400),
-                                    )
-                                  ]),
+                                text: 'Fret aérien \n',
+                                style: const TextStyle(
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.w700),
+                                children: [
+                                  TextSpan(
+                                    text: selectedTypeShipment.title,
+                                    style: const TextStyle(
+                                        color: Colors.black,
+                                        fontWeight: FontWeight.w400),
+                                  )
+                                ],
+                              ),
                             ),
                           ),
                         ],
@@ -762,8 +802,8 @@ class CommandResume extends StatelessWidget {
                     ]),
               ),
               Container(
-                padding: const EdgeInsets.all(20),
-                height: 50,
+                padding: const EdgeInsets.all(15),
+                width: double.infinity,
                 decoration: BoxDecoration(
                   boxShadow: [
                     BoxShadow(
@@ -773,14 +813,142 @@ class CommandResume extends StatelessWidget {
                       offset: const Offset(0, 3), // changes position of shadow
                     ),
                   ],
-                  color: Colors.white,
+                  color: outalmaTileBackground,
                   borderRadius: const BorderRadius.only(
                     bottomLeft: Radius.circular(20),
                     bottomRight: Radius.circular(20),
                   ),
                 ),
-                // child: ,
-              )
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        Image.asset(
+                          'lib/assets/images/takoff.png',
+                          height: 35,
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(left: 12),
+                          child: RichText(
+                            text: TextSpan(
+                              text: "${selectedDepartureCountry.name} \n",
+                              style: const TextStyle(
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.w700),
+                              children: const [
+                                TextSpan(
+                                  text: "Pays de départ",
+                                  style: TextStyle(
+                                      color: outalmaGreyTitle,
+                                      fontWeight: FontWeight.w400),
+                                )
+                              ],
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(left: 15),
+                      child: Image.asset(
+                        'lib/assets/images/separator.png',
+                        height: 20,
+                      ),
+                    ),
+                    Row(
+                      children: [
+                        Image.asset(
+                          'lib/assets/images/landing.png',
+                          height: 35,
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(left: 12),
+                          child: RichText(
+                            text: TextSpan(
+                              text: "${selectedDestinationCountry.name} \n",
+                              style: const TextStyle(
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.w700),
+                              children: const [
+                                TextSpan(
+                                  text: "Pays de destination",
+                                  style: TextStyle(
+                                      color: outalmaGreyTitle,
+                                      fontWeight: FontWeight.w400),
+                                )
+                              ],
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(top: 20, left: 10),
+                      child: RichText(
+                        text: TextSpan(
+                          text: "Pois du colis : ${weightController.text} KG",
+                          style: const TextStyle(
+                            color: Colors.black,
+                            fontWeight: FontWeight.w700,
+                            fontSize: 15,
+                          ),
+                        ),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(
+                        top: 5,
+                        left: 10,
+                      ),
+                      child: RichText(
+                        text: TextSpan(
+                          text: "Valeur du colis : ${valueController.text} €",
+                          style: const TextStyle(
+                            color: Colors.black,
+                            fontWeight: FontWeight.w700,
+                            fontSize: 15,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              actualStep == 4
+                  ? Container(
+                      decoration: BoxDecoration(
+                          color: outalmaCalcBlue,
+                          border: Border.all(
+                              width: 1, color: outalmaCalcBlueBorder),
+                          borderRadius:
+                              const BorderRadius.all(Radius.circular(10))),
+                      margin: const EdgeInsets.only(top: 15, bottom: 15),
+                      height: 50,
+                      width: double.infinity,
+                      child: Stack(
+                        children: [
+                          const Center(
+                            child: Text(
+                              '150 €',
+                              style: TextStyle(
+                                fontSize: 25,
+                                fontWeight: FontWeight.w700,
+                              ),
+                            ),
+                          ),
+                          Positioned(
+                            top: 5,
+                            left: 10,
+                            child: Image.asset(
+                              'lib/assets/images/calculator.png',
+                              width: 40,
+                            ),
+                          )
+                        ],
+                      ),
+                    )
+                  : Container()
             ],
           )
         ],

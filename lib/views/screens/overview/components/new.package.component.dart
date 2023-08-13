@@ -76,7 +76,7 @@ class _NewPackageComponentState extends State<NewPackageComponent> {
                       ),
                       child: Column(
                         children: [
-                          // Image.asset("lib/assets/images/plane.gif"),
+                          Image.asset("lib/assets/images/plane.gif"),
                           Container(
                             margin: const EdgeInsets.only(top: 10),
                             child: const Text(
@@ -125,7 +125,7 @@ class _NewPackageComponentState extends State<NewPackageComponent> {
                       ),
                       child: Column(
                         children: [
-                          // Image.asset("lib/assets/images/boat.gif"),
+                          Image.asset("lib/assets/images/boat.gif"),
                           Container(
                             margin: const EdgeInsets.only(top: 10),
                             child: const Text(
