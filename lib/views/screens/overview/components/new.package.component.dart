@@ -92,9 +92,12 @@ class _NewPackageComponentState extends State<NewPackageComponent> {
                   Positioned(
                     top: 10,
                     right: 20,
-                    child: selectedDeliveryMethod == 'plane'
-                        ? const CheckedMethodIcon()
-                        : const UncheckedMethodIcon(),
+                    child: AnimatedSwitcher(
+                      duration: const Duration(milliseconds: 300),
+                      child: selectedDeliveryMethod == 'plane'
+                          ? const CheckedMethodIcon()
+                          : const UncheckedMethodIcon(),
+                    ),
                   )
                 ],
               ),
@@ -138,9 +141,12 @@ class _NewPackageComponentState extends State<NewPackageComponent> {
                   Positioned(
                     top: 10,
                     right: 10,
-                    child: selectedDeliveryMethod == 'boat'
-                        ? const CheckedMethodIcon()
-                        : const UncheckedMethodIcon(),
+                    child: AnimatedSwitcher(
+                      duration: const Duration(milliseconds: 300),
+                      child: selectedDeliveryMethod == 'boat'
+                          ? const CheckedMethodIcon()
+                          : const UncheckedMethodIcon(),
+                    ),
                   ),
                 ],
               ),
