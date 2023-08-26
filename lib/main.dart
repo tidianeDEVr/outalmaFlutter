@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:outalma/views/screens/overview/overview.screen.dart';
+import 'package:outalma/views/screens/login_register/login.register.screen.dart';
 
 void main() {
   runApp(const OutalmaApp());
@@ -14,9 +14,7 @@ class OutalmaApp extends StatelessWidget {
     return const MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Outalma',
-      home: OverviewScreen(),
-      // home: SchedulePickupScreen(),
-      // home: SearchScreen(),
+      home: LoginRegisterScreen(),
     );
   }
 }

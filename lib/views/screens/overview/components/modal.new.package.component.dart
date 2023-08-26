@@ -71,54 +71,61 @@ class _ModalNewPackageComponentState extends State<ModalPackageComponent> {
               ),
               Column(
                 children: [
+                  Container(height: 10),
                   Container(
                     width: 250,
-                    margin: const EdgeInsets.only(bottom: 30),
-                    child: actualStep >= 3
-                        ? Container()
-                        : Stack(
-                            children: <Widget>[
-                              Positioned(
-                                top: 9,
-                                child: Container(
-                                  height: 2.5,
-                                  width: 250,
-                                  color: outalmaStepper,
-                                ),
+                    margin: const EdgeInsets.only(bottom: 30, top: 20),
+                    child: Visibility(
+                      visible: actualStep < 3,
+                      child: Stack(
+                        children: <Widget>[
+                          Positioned(
+                            top: 9,
+                            child: Container(
+                              height: 2.5,
+                              width: 250,
+                              color: outalmaStepper,
+                            ),
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              const CheckedStepper(),
+                              AnimatedSwitcher(
+                                duration: const Duration(milliseconds: 300),
+                                child: actualStep >= 1
+                                    ? const CheckedStepper()
+                                    : const UncheckedStepper(),
                               ),
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  const CheckedStepper(),
-                                  AnimatedSwitcher(
-                                    duration: const Duration(milliseconds: 300),
-                                    child: actualStep >= 1
-                                        ? const CheckedStepper()
-                                        : const UncheckedStepper(),
-                                  ),
-                                  AnimatedSwitcher(
-                                    duration: const Duration(milliseconds: 300),
-                                    child: actualStep >= 2
-                                        ? const CheckedStepper()
-                                        : const UncheckedStepper(),
-                                  ),
-                                ],
+                              AnimatedSwitcher(
+                                duration: const Duration(milliseconds: 300),
+                                child: actualStep >= 2
+                                    ? const CheckedStepper()
+                                    : const UncheckedStepper(),
                               ),
                             ],
                           ),
+                        ],
+                      ),
+                    ),
                   ),
-                  actualStep == 0 ? const ChooseCountries() : Container(),
-                  actualStep == 1
-                      ? ChooseTypeShipment(
-                          callbackFunction: _selectTypeShipment)
-                      : Container(),
-                  actualStep == 2 ? const WeightsAndDimensions() : Container(),
-                  actualStep >= 3
-                      ? CommandResume(step: actualStep)
-                      : Container(),
+                  Visibility(
+                      visible: actualStep == 0, child: const ChooseCountries()),
+                  Visibility(
+                      visible: actualStep == 1,
+                      child: ChooseTypeShipment(
+                          callbackFunction: _selectTypeShipment)),
+                  Visibility(
+                    visible: actualStep == 2,
+                    child: const WeightsAndDimensions(),
+                  ),
+                  Visibility(
+                    visible: actualStep >= 3,
+                    child: CommandResume(step: actualStep),
+                  )
                 ],
               ),
+              Container(height: 40),
               Visibility(
                 visible: actualStep != 1,
                 child: InkWell(
@@ -139,9 +146,18 @@ class _ModalNewPackageComponentState extends State<ModalPackageComponent> {
                   }),
                   child: Column(
                     children: [
-                      actualStep == 3
-                          ? const NextButton(libelle: 'Calculer')
-                          : const NextButton(libelle: 'Suivant'),
+                      Visibility(
+                        visible: actualStep != 3 && actualStep != 4,
+                        child: const NextButton(libelle: 'Suivant'),
+                      ),
+                      Visibility(
+                        visible: actualStep == 3,
+                        child: const NextButton(libelle: 'Calculer'),
+                      ),
+                      Visibility(
+                        visible: actualStep == 4,
+                        child: const NextButton(libelle: 'Finaliser'),
+                      ),
                     ],
                   ),
                 ),
@@ -222,16 +238,13 @@ class _ChooseCountriesState extends State<ChooseCountries> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Container(
-          margin: const EdgeInsets.only(top: 10),
-          child: const Text(
-            "Pays de départ",
-            style: TextStyle(
-              color: outalmaGreyTitle,
-              fontWeight: FontWeight.w700,
-              fontSize: 17,
-              fontStyle: FontStyle.italic,
-            ),
+        const Text(
+          "Pays de départ",
+          style: TextStyle(
+            color: outalmaGreyTitle,
+            fontWeight: FontWeight.w700,
+            fontSize: 17,
+            fontStyle: FontStyle.italic,
           ),
         ),
         const CountrySelectorTile(type: 'departure'),
@@ -431,279 +444,270 @@ class WeightsAndDimensions extends StatelessWidget {
   Widget build(BuildContext context) {
     weightController.text = '10';
     valueController.text = '1000';
-    // lengthController
-    // widthController
-    // heigthController
-    return SizedBox(
-      height: 220,
-      child: SingleChildScrollView(
-        child: Column(
+    return Column(
+      children: [
+        const Text(
+          'Poids du colis',
+          style: TextStyle(
+            fontSize: 14,
+            fontWeight: FontWeight.w700,
+            color: outalmaGreyTitle,
+            fontStyle: FontStyle.italic,
+          ),
+        ),
+        Stack(
           children: [
-            const Text(
-              'Poids du colis',
-              style: TextStyle(
-                fontSize: 14,
-                fontWeight: FontWeight.w700,
-                color: outalmaGreyTitle,
-                fontStyle: FontStyle.italic,
+            Container(
+              margin: const EdgeInsets.only(
+                  left: 20, right: 20, top: 10, bottom: 10),
+              decoration: BoxDecoration(
+                border: Border.all(width: 1, color: outalmaStepper),
+                color: outalmaBackground,
+                borderRadius: const BorderRadius.all(Radius.circular(10)),
+              ),
+              child: TextField(
+                style:
+                    const TextStyle(fontWeight: FontWeight.w700, fontSize: 15),
+                controller: weightController,
+                decoration: const InputDecoration(
+                    border: InputBorder.none,
+                    contentPadding: EdgeInsets.only(left: 10)),
               ),
             ),
-            Stack(
-              children: [
-                Container(
-                  margin: const EdgeInsets.only(
-                      left: 20, right: 20, top: 10, bottom: 10),
+            Positioned(
+                top: 10,
+                right: 20,
+                child: Container(
                   decoration: BoxDecoration(
                     border: Border.all(width: 1, color: outalmaStepper),
-                    color: outalmaBackground,
-                    borderRadius: const BorderRadius.all(Radius.circular(10)),
-                  ),
-                  child: TextField(
-                    style: const TextStyle(
-                        fontWeight: FontWeight.w700, fontSize: 15),
-                    controller: weightController,
-                    decoration: const InputDecoration(
-                        border: InputBorder.none,
-                        contentPadding: EdgeInsets.only(left: 10)),
-                  ),
-                ),
-                Positioned(
-                    top: 10,
-                    right: 20,
-                    child: Container(
-                      decoration: BoxDecoration(
-                        border: Border.all(width: 1, color: outalmaStepper),
-                        color: Colors.white,
-                        borderRadius: const BorderRadius.only(
-                          topRight: Radius.circular(10),
-                          bottomRight: Radius.circular(10),
-                        ),
-                      ),
-                      width: 50,
-                      height: 50,
-                      child: const Center(
-                        child: Text(
-                          'KG',
-                          style: TextStyle(
-                              fontWeight: FontWeight.w700, fontSize: 15),
-                        ),
-                      ),
-                    ))
-              ],
-            ),
-            const Text(
-              'La valeur du colis',
-              style: TextStyle(
-                fontSize: 14,
-                fontWeight: FontWeight.w700,
-                color: outalmaGreyTitle,
-                fontStyle: FontStyle.italic,
-              ),
-            ),
-            Stack(
-              children: [
-                Container(
-                  margin: const EdgeInsets.only(
-                      left: 20, right: 20, top: 10, bottom: 10),
-                  decoration: BoxDecoration(
-                    border: Border.all(width: 1, color: outalmaStepper),
-                    color: outalmaBackground,
-                    borderRadius: const BorderRadius.all(Radius.circular(10)),
-                  ),
-                  child: TextField(
-                    style: const TextStyle(
-                        fontWeight: FontWeight.w700, fontSize: 15),
-                    controller: valueController,
-                    decoration: const InputDecoration(
-                        border: InputBorder.none,
-                        contentPadding: EdgeInsets.only(left: 10)),
-                  ),
-                ),
-                Positioned(
-                    top: 10,
-                    right: 20,
-                    child: Container(
-                      decoration: BoxDecoration(
-                        border: Border.all(width: 1, color: outalmaStepper),
-                        color: Colors.white,
-                        borderRadius: const BorderRadius.only(
-                          topRight: Radius.circular(10),
-                          bottomRight: Radius.circular(10),
-                        ),
-                      ),
-                      width: 50,
-                      height: 50,
-                      child: const Center(
-                        child: Text(
-                          '€',
-                          style: TextStyle(
-                              fontWeight: FontWeight.w700, fontSize: 15),
-                        ),
-                      ),
-                    ))
-              ],
-            ),
-            const Divider(),
-            const Text(
-              'Longueur',
-              style: TextStyle(
-                fontSize: 14,
-                fontWeight: FontWeight.w700,
-                color: outalmaGreyTitle,
-                fontStyle: FontStyle.italic,
-              ),
-            ),
-            Stack(
-              children: [
-                Container(
-                  margin: const EdgeInsets.only(
-                      left: 20, right: 20, top: 10, bottom: 10),
-                  decoration: BoxDecoration(
-                    border: Border.all(width: 1, color: outalmaStepper),
-                    color: outalmaBackground,
-                    borderRadius: const BorderRadius.all(Radius.circular(10)),
-                  ),
-                  child: TextField(
-                    style: const TextStyle(
-                        fontWeight: FontWeight.w700, fontSize: 15),
-                    controller: lengthController,
-                    decoration: const InputDecoration(
-                        border: InputBorder.none,
-                        contentPadding: EdgeInsets.only(left: 10)),
-                  ),
-                ),
-                Positioned(
-                    top: 10,
-                    right: 20,
-                    child: Container(
-                      decoration: BoxDecoration(
-                        border: Border.all(width: 1, color: outalmaStepper),
-                        color: Colors.white,
-                        borderRadius: const BorderRadius.only(
-                          topRight: Radius.circular(10),
-                          bottomRight: Radius.circular(10),
-                        ),
-                      ),
-                      width: 50,
-                      height: 50,
-                      child: const Center(
-                        child: Text(
-                          'CM',
-                          style: TextStyle(
-                              fontWeight: FontWeight.w700, fontSize: 15),
-                        ),
-                      ),
-                    ))
-              ],
-            ),
-            const Text(
-              'Largeur',
-              style: TextStyle(
-                fontSize: 14,
-                fontWeight: FontWeight.w700,
-                color: outalmaGreyTitle,
-                fontStyle: FontStyle.italic,
-              ),
-            ),
-            Stack(
-              children: [
-                Container(
-                  margin: const EdgeInsets.only(
-                      left: 20, right: 20, top: 10, bottom: 10),
-                  decoration: BoxDecoration(
-                    border: Border.all(width: 1, color: outalmaStepper),
-                    color: outalmaBackground,
-                    borderRadius: const BorderRadius.all(Radius.circular(10)),
-                  ),
-                  child: TextField(
-                    style: const TextStyle(
-                        fontWeight: FontWeight.w700, fontSize: 15),
-                    controller: widthController,
-                    decoration: const InputDecoration(
-                        border: InputBorder.none,
-                        contentPadding: EdgeInsets.only(left: 10)),
-                  ),
-                ),
-                Positioned(
-                    top: 10,
-                    right: 20,
-                    child: Container(
-                      decoration: BoxDecoration(
-                        border: Border.all(width: 1, color: outalmaStepper),
-                        color: Colors.white,
-                        borderRadius: const BorderRadius.only(
-                          topRight: Radius.circular(10),
-                          bottomRight: Radius.circular(10),
-                        ),
-                      ),
-                      width: 50,
-                      height: 50,
-                      child: const Center(
-                        child: Text(
-                          'CM',
-                          style: TextStyle(
-                              fontWeight: FontWeight.w700, fontSize: 15),
-                        ),
-                      ),
-                    ))
-              ],
-            ),
-            const Text(
-              'Hauteur',
-              style: TextStyle(
-                fontSize: 14,
-                fontWeight: FontWeight.w700,
-                color: outalmaGreyTitle,
-                fontStyle: FontStyle.italic,
-              ),
-            ),
-            Stack(
-              children: [
-                Container(
-                  margin: const EdgeInsets.only(
-                      left: 20, right: 20, top: 10, bottom: 10),
-                  decoration: BoxDecoration(
-                    border: Border.all(width: 1, color: outalmaStepper),
-                    color: outalmaBackground,
-                    borderRadius: const BorderRadius.all(Radius.circular(10)),
-                  ),
-                  child: TextField(
-                    style: const TextStyle(
-                        fontWeight: FontWeight.w700, fontSize: 15),
-                    controller: heightController,
-                    decoration: const InputDecoration(
-                        border: InputBorder.none,
-                        contentPadding: EdgeInsets.only(left: 10)),
-                  ),
-                ),
-                Positioned(
-                  top: 10,
-                  right: 20,
-                  child: Container(
-                    decoration: BoxDecoration(
-                      border: Border.all(width: 1, color: outalmaStepper),
-                      color: Colors.white,
-                      borderRadius: const BorderRadius.only(
-                        topRight: Radius.circular(10),
-                        bottomRight: Radius.circular(10),
-                      ),
-                    ),
-                    width: 50,
-                    height: 50,
-                    child: const Center(
-                      child: Text(
-                        'CM',
-                        style: TextStyle(
-                            fontWeight: FontWeight.w700, fontSize: 15),
-                      ),
+                    color: Colors.white,
+                    borderRadius: const BorderRadius.only(
+                      topRight: Radius.circular(10),
+                      bottomRight: Radius.circular(10),
                     ),
                   ),
-                )
-              ],
-            ),
+                  width: 50,
+                  height: 50,
+                  child: const Center(
+                    child: Text(
+                      'KG',
+                      style:
+                          TextStyle(fontWeight: FontWeight.w700, fontSize: 15),
+                    ),
+                  ),
+                ))
           ],
         ),
-      ),
+        const Text(
+          'La valeur du colis',
+          style: TextStyle(
+            fontSize: 14,
+            fontWeight: FontWeight.w700,
+            color: outalmaGreyTitle,
+            fontStyle: FontStyle.italic,
+          ),
+        ),
+        Stack(
+          children: [
+            Container(
+              margin: const EdgeInsets.only(
+                  left: 20, right: 20, top: 10, bottom: 10),
+              decoration: BoxDecoration(
+                border: Border.all(width: 1, color: outalmaStepper),
+                color: outalmaBackground,
+                borderRadius: const BorderRadius.all(Radius.circular(10)),
+              ),
+              child: TextField(
+                style:
+                    const TextStyle(fontWeight: FontWeight.w700, fontSize: 15),
+                controller: valueController,
+                decoration: const InputDecoration(
+                    border: InputBorder.none,
+                    contentPadding: EdgeInsets.only(left: 10)),
+              ),
+            ),
+            Positioned(
+                top: 10,
+                right: 20,
+                child: Container(
+                  decoration: BoxDecoration(
+                    border: Border.all(width: 1, color: outalmaStepper),
+                    color: Colors.white,
+                    borderRadius: const BorderRadius.only(
+                      topRight: Radius.circular(10),
+                      bottomRight: Radius.circular(10),
+                    ),
+                  ),
+                  width: 50,
+                  height: 50,
+                  child: const Center(
+                    child: Text(
+                      '€',
+                      style:
+                          TextStyle(fontWeight: FontWeight.w700, fontSize: 15),
+                    ),
+                  ),
+                ))
+          ],
+        ),
+        const Divider(),
+        const Text(
+          'Longueur',
+          style: TextStyle(
+            fontSize: 14,
+            fontWeight: FontWeight.w700,
+            color: outalmaGreyTitle,
+            fontStyle: FontStyle.italic,
+          ),
+        ),
+        Stack(
+          children: [
+            Container(
+              margin: const EdgeInsets.only(
+                  left: 20, right: 20, top: 10, bottom: 10),
+              decoration: BoxDecoration(
+                border: Border.all(width: 1, color: outalmaStepper),
+                color: outalmaBackground,
+                borderRadius: const BorderRadius.all(Radius.circular(10)),
+              ),
+              child: TextField(
+                style:
+                    const TextStyle(fontWeight: FontWeight.w700, fontSize: 15),
+                controller: lengthController,
+                decoration: const InputDecoration(
+                    border: InputBorder.none,
+                    contentPadding: EdgeInsets.only(left: 10)),
+              ),
+            ),
+            Positioned(
+                top: 10,
+                right: 20,
+                child: Container(
+                  decoration: BoxDecoration(
+                    border: Border.all(width: 1, color: outalmaStepper),
+                    color: Colors.white,
+                    borderRadius: const BorderRadius.only(
+                      topRight: Radius.circular(10),
+                      bottomRight: Radius.circular(10),
+                    ),
+                  ),
+                  width: 50,
+                  height: 50,
+                  child: const Center(
+                    child: Text(
+                      'CM',
+                      style:
+                          TextStyle(fontWeight: FontWeight.w700, fontSize: 15),
+                    ),
+                  ),
+                ))
+          ],
+        ),
+        const Text(
+          'Largeur',
+          style: TextStyle(
+            fontSize: 14,
+            fontWeight: FontWeight.w700,
+            color: outalmaGreyTitle,
+            fontStyle: FontStyle.italic,
+          ),
+        ),
+        Stack(
+          children: [
+            Container(
+              margin: const EdgeInsets.only(
+                  left: 20, right: 20, top: 10, bottom: 10),
+              decoration: BoxDecoration(
+                border: Border.all(width: 1, color: outalmaStepper),
+                color: outalmaBackground,
+                borderRadius: const BorderRadius.all(Radius.circular(10)),
+              ),
+              child: TextField(
+                style:
+                    const TextStyle(fontWeight: FontWeight.w700, fontSize: 15),
+                controller: widthController,
+                decoration: const InputDecoration(
+                    border: InputBorder.none,
+                    contentPadding: EdgeInsets.only(left: 10)),
+              ),
+            ),
+            Positioned(
+                top: 10,
+                right: 20,
+                child: Container(
+                  decoration: BoxDecoration(
+                    border: Border.all(width: 1, color: outalmaStepper),
+                    color: Colors.white,
+                    borderRadius: const BorderRadius.only(
+                      topRight: Radius.circular(10),
+                      bottomRight: Radius.circular(10),
+                    ),
+                  ),
+                  width: 50,
+                  height: 50,
+                  child: const Center(
+                    child: Text(
+                      'CM',
+                      style:
+                          TextStyle(fontWeight: FontWeight.w700, fontSize: 15),
+                    ),
+                  ),
+                ))
+          ],
+        ),
+        const Text(
+          'Hauteur',
+          style: TextStyle(
+            fontSize: 14,
+            fontWeight: FontWeight.w700,
+            color: outalmaGreyTitle,
+            fontStyle: FontStyle.italic,
+          ),
+        ),
+        Stack(
+          children: [
+            Container(
+              margin: const EdgeInsets.only(
+                  left: 20, right: 20, top: 10, bottom: 10),
+              decoration: BoxDecoration(
+                border: Border.all(width: 1, color: outalmaStepper),
+                color: outalmaBackground,
+                borderRadius: const BorderRadius.all(Radius.circular(10)),
+              ),
+              child: TextField(
+                style:
+                    const TextStyle(fontWeight: FontWeight.w700, fontSize: 15),
+                controller: heightController,
+                decoration: const InputDecoration(
+                    border: InputBorder.none,
+                    contentPadding: EdgeInsets.only(left: 10)),
+              ),
+            ),
+            Positioned(
+              top: 10,
+              right: 20,
+              child: Container(
+                decoration: BoxDecoration(
+                  border: Border.all(width: 1, color: outalmaStepper),
+                  color: Colors.white,
+                  borderRadius: const BorderRadius.only(
+                    topRight: Radius.circular(10),
+                    bottomRight: Radius.circular(10),
+                  ),
+                ),
+                width: 50,
+                height: 50,
+                child: const Center(
+                  child: Text(
+                    'CM',
+                    style: TextStyle(fontWeight: FontWeight.w700, fontSize: 15),
+                  ),
+                ),
+              ),
+            )
+          ],
+        ),
+      ],
     );
   }
 }
@@ -853,7 +857,7 @@ class _CommandResumeState extends State<CommandResume> {
                       padding: const EdgeInsets.only(left: 15),
                       child: Image.asset(
                         'lib/assets/images/separator.png',
-                        height: 20,
+                        height: 60,
                       ),
                     ),
                     Row(
@@ -898,7 +902,8 @@ class _CommandResumeState extends State<CommandResume> {
                     ),
                     Padding(
                       padding: const EdgeInsets.only(
-                        top: 5,
+                        top: 10,
+                        bottom: 10,
                         left: 10,
                       ),
                       child: RichText(
@@ -915,40 +920,53 @@ class _CommandResumeState extends State<CommandResume> {
                   ],
                 ),
               ),
-              actualStep == 4
-                  ? Container(
-                      decoration: BoxDecoration(
-                          color: outalmaCalcBlue,
-                          border: Border.all(
-                              width: 1, color: outalmaCalcBlueBorder),
-                          borderRadius:
-                              const BorderRadius.all(Radius.circular(10))),
-                      margin: const EdgeInsets.only(top: 15, bottom: 15),
-                      height: 50,
-                      width: double.infinity,
-                      child: Stack(
-                        children: [
-                          const Center(
-                            child: Text(
-                              '150 €',
-                              style: TextStyle(
-                                fontSize: 25,
-                                fontWeight: FontWeight.w700,
-                              ),
-                            ),
+              Visibility(
+                visible: actualStep == 4,
+                child: Container(
+                  decoration: BoxDecoration(
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.grey.withOpacity(0.3),
+                          spreadRadius: 2,
+                          blurRadius: 7,
+                          offset: const Offset(0, 3),
+                        ),
+                      ],
+                      color: outalmaCalcBlue,
+                      border:
+                          Border.all(width: 3, color: outalmaCalcBlueBorder),
+                      borderRadius:
+                          const BorderRadius.all(Radius.circular(15))),
+                  margin: const EdgeInsets.only(top: 30),
+                  height: 80,
+                  width: double.infinity,
+                  child: Stack(
+                    children: [
+                      const Center(
+                        child: Text(
+                          '150 €',
+                          style: TextStyle(
+                            fontSize: 40,
+                            fontWeight: FontWeight.w700,
                           ),
-                          Positioned(
-                            top: 5,
-                            left: 10,
+                        ),
+                      ),
+                      Positioned(
+                        left: 10,
+                        child: SizedBox(
+                          height: 80,
+                          child: Center(
                             child: Image.asset(
                               'lib/assets/images/calculator.png',
-                              width: 40,
+                              width: 60,
                             ),
-                          )
-                        ],
-                      ),
-                    )
-                  : Container()
+                          ),
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+              ),
             ],
           )
         ],

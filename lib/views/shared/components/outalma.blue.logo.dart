@@ -2,11 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
 class BlueLogo extends StatelessWidget {
-  const BlueLogo({super.key});
+  final double size;
+  const BlueLogo({super.key, this.size = 20});
 
   @override
   Widget build(BuildContext context) {
-    // return Image.asset("lib/assets/images/blue_logo.svg");
-    return SvgPicture.asset("lib/assets/images/blue_logo.svg");
+    return SvgPicture.asset(
+      "lib/assets/images/blue_logo.svg",
+      width: size,
+    );
   }
 }

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:outalma/utils/outalma.config.dart';
 import 'package:outalma/views/screens/overview/components/body.component.dart';
 import 'package:outalma/views/screens/overview/components/user.badge.component.dart';
+import 'package:outalma/views/screens/search/search.screen.dart';
 
 class OverviewScreen extends StatelessWidget {
   const OverviewScreen({super.key});
@@ -18,7 +19,13 @@ class OverviewScreen extends StatelessWidget {
           Container(
             padding: const EdgeInsets.only(right: 10),
             child: IconButton(
-              onPressed: () {},
+              onPressed: () {
+                Navigator.of(context).pushReplacement(
+                  MaterialPageRoute(
+                    builder: (BuildContext context) => const SearchScreen(),
+                  ),
+                );
+              },
               icon: const Icon(
                 Icons.search,
                 color: outalmaMainBlue,

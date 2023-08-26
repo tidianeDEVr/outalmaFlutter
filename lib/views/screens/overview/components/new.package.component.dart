@@ -31,7 +31,7 @@ class _NewPackageComponentState extends State<NewPackageComponent> {
             color: Colors.grey.withOpacity(0.3),
             spreadRadius: 2,
             blurRadius: 7,
-            offset: const Offset(0, 3), // changes position of shadow
+            offset: const Offset(0, 3),
           ),
         ],
       ),
@@ -76,7 +76,7 @@ class _NewPackageComponentState extends State<NewPackageComponent> {
                       ),
                       child: Column(
                         children: [
-                          Image.asset("lib/assets/images/plane.gif"),
+                          // Image.asset("lib/assets/images/plane.gif"),
                           Container(
                             margin: const EdgeInsets.only(top: 10),
                             child: const Text(
@@ -125,7 +125,7 @@ class _NewPackageComponentState extends State<NewPackageComponent> {
                       ),
                       child: Column(
                         children: [
-                          Image.asset("lib/assets/images/boat.gif"),
+                          // Image.asset("lib/assets/images/boat.gif"),
                           Container(
                             margin: const EdgeInsets.only(top: 10),
                             child: const Text(
@@ -199,15 +199,21 @@ class _NewPackageComponentState extends State<NewPackageComponent> {
 
   _displayBottomSheet(BuildContext context) {
     if (selectedDeliveryMethod == "") return;
+
     showModalBottomSheet(
       context: context,
       backgroundColor: outalmaBackgroundModal,
+      isScrollControlled: true,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(
           top: Radius.circular(20),
         ),
       ),
-      builder: (builder) => const ModalPackageComponent(),
+      builder: (builder) => const Wrap(
+        children: [
+          ModalPackageComponent(),
+        ],
+      ),
     );
   }
 
