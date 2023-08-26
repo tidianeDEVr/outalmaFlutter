@@ -302,6 +302,38 @@ class _CountrySelectorTileState extends State<CountrySelectorTile> {
             ? selectedDepartureCountry
             : selectedDestinationCountry,
         onChanged: (country) => _selectCountry(widget.type, country!),
+        popupProps: PopupProps.menu(
+          fit: FlexFit.loose,
+          itemBuilder: (context, item, isSelected) {
+            return SizedBox(
+              height: 50,
+              child: Stack(
+                children: [
+                  Positioned(
+                      left: 10,
+                      child: SizedBox(
+                        height: 50,
+                        child: Align(
+                          alignment: Alignment.centerLeft,
+                          child: Image.asset(
+                            'lib/assets/images/${item.flag}',
+                            width: 30,
+                          ),
+                        ),
+                      )),
+                  Center(
+                      child: Text(
+                    item.name,
+                    style: const TextStyle(
+                      fontWeight: FontWeight.w700,
+                      fontSize: 16,
+                    ),
+                  )),
+                ],
+              ),
+            );
+          },
+        ),
         dropdownDecoratorProps: DropDownDecoratorProps(
           textAlign: TextAlign.center,
           baseStyle: const TextStyle(fontWeight: FontWeight.w700, fontSize: 17),
