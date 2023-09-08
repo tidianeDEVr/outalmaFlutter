@@ -3,6 +3,7 @@ import 'package:otp_text_field/otp_field.dart';
 import 'package:otp_text_field/style.dart';
 import 'package:outalma/utils/outalma.config.dart';
 import 'package:outalma/views/screens/login_register/components/security.button.component.dart';
+import 'package:outalma/views/screens/overview/overview.screen.dart';
 
 int actualStep = 0;
 TextEditingController emailController = TextEditingController();
@@ -285,7 +286,16 @@ class _BodyState extends State<Body> {
                     ),
                   ),
                   Container(height: 30),
-                  const SecurityButton(label: 'ENREGISTRER')
+                  InkWell(
+                      onTap: () => {
+                            Navigator.of(context).pushReplacement(
+                              MaterialPageRoute(
+                                builder: (BuildContext context) =>
+                                    const OverviewScreen(),
+                              ),
+                            ),
+                          },
+                      child: const SecurityButton(label: 'ENREGISTRER'))
                 ],
               ),
             ),

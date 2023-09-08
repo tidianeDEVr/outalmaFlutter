@@ -3,6 +3,7 @@ import 'package:outalma/utils/outalma.config.dart';
 import 'package:outalma/views/screens/configure_account/configure.account.screen.dart';
 import 'package:outalma/views/screens/login_register/components/security.button.component.dart';
 import 'package:outalma/views/screens/overview/overview.screen.dart';
+import 'package:outalma/views/screens/recovery_password/recovery.password.screen.dart';
 import 'package:outalma/views/shared/components/outalma.blue.logo.dart';
 
 TextEditingController identifiantController = TextEditingController();
@@ -111,7 +112,14 @@ class _BodyState extends State<Body> {
               alignment: Alignment.centerRight,
               child: isLoginActive
                   ? TextButton(
-                      onPressed: () => {},
+                      onPressed: () => {
+                        Navigator.of(context).pushReplacement(
+                          MaterialPageRoute(
+                            builder: (BuildContext context) =>
+                                const RecoveryPasswordScreen(),
+                          ),
+                        ),
+                      },
                       child: const Text(
                         'Mot de passe oublié ?',
                         style: TextStyle(

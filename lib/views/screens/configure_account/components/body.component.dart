@@ -14,6 +14,7 @@ class Body extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    emailController.text = 'cheikhtiindiaye@gmail.com';
     return Container(
       color: outalmaMainBlue,
       width: double.infinity,
@@ -99,6 +100,7 @@ class Body extends StatelessWidget {
                     ),
                     Container(height: 15),
                     TextField(
+                      enabled: false,
                       controller: emailController,
                       decoration: const InputDecoration(
                         filled: true,

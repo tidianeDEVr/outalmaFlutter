@@ -24,12 +24,15 @@ class SavedPackagesComponent extends StatelessWidget {
               ),
             ),
           ),
-          SizedBox(
-            height: (85 * fixturesPackages.length).toDouble(),
-            child: ListView.builder(
-              itemCount: fixturesPackages.length,
-              itemBuilder: (context, index) => SinglePackageTile(
-                package: fixturesPackages[index],
+          Container(
+            padding: const EdgeInsets.only(left: 20, right: 20),
+            child: SizedBox(
+              height: (85 * fixturesPackages.length).toDouble(),
+              child: ListView.builder(
+                itemCount: fixturesPackages.length,
+                itemBuilder: (context, index) => SinglePackageTile(
+                  package: fixturesPackages[index],
+                ),
               ),
             ),
           ),
@@ -55,8 +58,6 @@ class SinglePackageTile extends StatelessWidget {
       ),
       margin: const EdgeInsets.only(
         bottom: 15,
-        left: 20,
-        right: 20,
       ),
       decoration: BoxDecoration(
         color: outalmaTileBackground,
