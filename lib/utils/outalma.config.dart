@@ -12,3 +12,6 @@ const Color outalmaYellow = Color.fromARGB(255, 249, 241, 201);
 const Color outalmaYellowBorder = Color.fromARGB(255, 208, 193, 54);
 const Color outalmaCalcBlue = Color.fromARGB(255, 226, 255, 255);
 const Color outalmaCalcBlueBorder = Color.fromARGB(255, 51, 204, 204);
+
+const String apiBaseUrl = 'https//app.outalma.com/api/v1';
+const String apiKey = '457adf6f';

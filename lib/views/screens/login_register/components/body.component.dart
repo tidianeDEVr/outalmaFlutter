@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+// import 'package:outalma/services/security.service.dart';
+// import 'package:outalma/utils/locators.dart';
 import 'package:outalma/utils/outalma.config.dart';
 import 'package:outalma/views/screens/configure_account/configure.account.screen.dart';
 import 'package:outalma/views/screens/login_register/components/security.button.component.dart';
@@ -6,8 +8,7 @@ import 'package:outalma/views/screens/overview/overview.screen.dart';
 import 'package:outalma/views/screens/recovery_password/recovery.password.screen.dart';
 import 'package:outalma/views/shared/components/outalma.blue.logo.dart';
 
-TextEditingController identifiantController = TextEditingController();
-TextEditingController passwordController = TextEditingController();
+final loginKey = GlobalKey<FormState>();
 bool isPasswordHidded = true;
 bool isLoginActive = true;
 bool isTermsConditionsChecked = false;
@@ -20,6 +21,12 @@ class Body extends StatefulWidget {
 }
 
 class _BodyState extends State<Body> {
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   locator<SecurityService>().loginService('', '');
+  // }
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -41,137 +48,13 @@ class _BodyState extends State<Body> {
                 ),
               ),
             ),
-            TextField(
-              controller: identifiantController,
-              decoration: const InputDecoration(
-                contentPadding: EdgeInsets.all(20),
-                border: OutlineInputBorder(
-                  borderSide: BorderSide(
-                    width: 5,
-                  ),
-                  borderRadius: BorderRadius.all(
-                    Radius.circular(50),
-                  ),
-                ),
-                enabledBorder: OutlineInputBorder(
-                  borderSide: BorderSide(
-                    width: 2,
-                    color: outalmaMainBlue,
-                  ),
-                  borderRadius: BorderRadius.all(
-                    Radius.circular(50),
-                  ),
-                ),
-                labelText: 'Identifiant',
-              ),
-            ),
-            Container(height: 20),
-            TextField(
-              controller: passwordController,
-              obscureText: isPasswordHidded,
-              decoration: InputDecoration(
-                suffixIcon: InkWell(
-                  onTap: () {
-                    setState(() {
-                      isPasswordHidded = !isPasswordHidded;
-                    });
-                  },
-                  child: Container(
-                    margin: const EdgeInsets.only(right: 15),
-                    width: 10,
-                    height: 10,
-                    child: const Icon(
-                      Icons.remove_red_eye,
-                      color: outalmaMainBlue,
-                    ),
-                  ),
-                ),
-                contentPadding: const EdgeInsets.all(20),
-                border: const OutlineInputBorder(
-                  borderSide: BorderSide(
-                    width: 5,
-                  ),
-                  borderRadius: BorderRadius.all(
-                    Radius.circular(50),
-                  ),
-                ),
-                enabledBorder: const OutlineInputBorder(
-                  borderSide: BorderSide(
-                    width: 2,
-                    color: outalmaMainBlue,
-                  ),
-                  borderRadius: BorderRadius.all(
-                    Radius.circular(50),
-                  ),
-                ),
-                labelText: 'Mot de passe',
-              ),
-            ),
-            Container(
-              margin: const EdgeInsets.only(bottom: 20),
-              alignment: Alignment.centerRight,
-              child: isLoginActive
-                  ? TextButton(
-                      onPressed: () => {
-                        Navigator.of(context).pushReplacement(
-                          MaterialPageRoute(
-                            builder: (BuildContext context) =>
-                                const RecoveryPasswordScreen(),
-                          ),
-                        ),
-                      },
-                      child: const Text(
-                        'Mot de passe oublié ?',
-                        style: TextStyle(
-                          color: outalmaMainBlue,
-                          fontWeight: FontWeight.w700,
-                        ),
-                      ),
-                    )
-                  : Row(
-                      children: [
-                        Checkbox(
-                            fillColor:
-                                MaterialStateProperty.all(outalmaMainBlue),
-                            value: isTermsConditionsChecked,
-                            onChanged: (bool? value) {
-                              setState(() {
-                                isTermsConditionsChecked = value!;
-                              });
-                            }),
-                        Flexible(
-                          child: RichText(
-                            text: TextSpan(
-                              text: 'J\'accepte les ',
-                              style: TextStyle(color: Colors.grey[800]),
-                              children: const [
-                                TextSpan(
-                                  text: 'termes',
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.w700,
-                                      color: outalmaMainBlue),
-                                ),
-                                TextSpan(text: ' et '),
-                                TextSpan(
-                                  text: 'conditions',
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.w700,
-                                      color: outalmaMainBlue),
-                                ),
-                                TextSpan(
-                                    text:
-                                        ' et la politique de confidentialité.'),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-            ),
+            loginRegisterForm(),
+            forgetPasswordBtn(context),
             InkWell(
               onTap: () => _loginOrRegister(),
               child: isLoginActive
-                  ? const SecurityButton(label: 'SE CONNECTER')
+                  ? const Opacity(
+                      opacity: 1, child: SecurityButton(label: 'SE CONNECTER'))
                   : Opacity(
                       opacity: isTermsConditionsChecked ? 1 : .5,
                       child: const SecurityButton(label: 'S\'INSCRIRE'),
@@ -317,13 +200,162 @@ class _BodyState extends State<Body> {
     );
   }
 
+  Container forgetPasswordBtn(BuildContext context) {
+    return Container(
+      margin: const EdgeInsets.only(bottom: 20),
+      alignment: Alignment.centerRight,
+      child: isLoginActive
+          ? TextButton(
+              onPressed: () => {
+                Navigator.of(context).pushReplacement(
+                  MaterialPageRoute(
+                    builder: (BuildContext context) =>
+                        const RecoveryPasswordScreen(),
+                  ),
+                ),
+              },
+              child: const Text(
+                'Mot de passe oublié ?',
+                style: TextStyle(
+                  color: outalmaMainBlue,
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+            )
+          : Row(
+              children: [
+                Checkbox(
+                    fillColor: MaterialStateProperty.all(outalmaMainBlue),
+                    value: isTermsConditionsChecked,
+                    onChanged: (bool? value) {
+                      setState(() {
+                        isTermsConditionsChecked = value!;
+                      });
+                    }),
+                Flexible(
+                  child: RichText(
+                    text: TextSpan(
+                      text: 'J\'accepte les ',
+                      style: TextStyle(color: Colors.grey[800]),
+                      children: const [
+                        TextSpan(
+                          text: 'termes',
+                          style: TextStyle(
+                              fontWeight: FontWeight.w700,
+                              color: outalmaMainBlue),
+                        ),
+                        TextSpan(text: ' et '),
+                        TextSpan(
+                          text: 'conditions',
+                          style: TextStyle(
+                              fontWeight: FontWeight.w700,
+                              color: outalmaMainBlue),
+                        ),
+                        TextSpan(text: ' et la politique de confidentialité.'),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
+    );
+  }
+
+  Form loginRegisterForm() {
+    return Form(
+      key: loginKey,
+      child: Column(
+        children: [
+          TextFormField(
+            validator: (value) {
+              if (value == null || value.isEmpty || value.length < 5) {
+                return 'Entrez votre identifiant';
+              }
+              return null;
+            },
+            decoration: const InputDecoration(
+              contentPadding: EdgeInsets.all(20),
+              border: OutlineInputBorder(
+                borderSide: BorderSide(
+                  width: 5,
+                ),
+                borderRadius: BorderRadius.all(
+                  Radius.circular(50),
+                ),
+              ),
+              enabledBorder: OutlineInputBorder(
+                borderSide: BorderSide(
+                  width: 2,
+                  color: outalmaMainBlue,
+                ),
+                borderRadius: BorderRadius.all(
+                  Radius.circular(50),
+                ),
+              ),
+              labelText: 'Identifiant',
+            ),
+          ),
+          Container(height: 20),
+          TextFormField(
+            obscureText: isPasswordHidded,
+            validator: (value) {
+              if (value == null || value.isEmpty || value.length < 5) {
+                return 'Entrez votre mot de passe';
+              }
+              return null;
+            },
+            decoration: InputDecoration(
+              suffixIcon: InkWell(
+                onTap: () {
+                  setState(() {
+                    isPasswordHidded = !isPasswordHidded;
+                  });
+                },
+                child: Container(
+                  margin: const EdgeInsets.only(right: 15),
+                  width: 10,
+                  height: 10,
+                  child: const Icon(
+                    Icons.remove_red_eye,
+                    color: outalmaMainBlue,
+                  ),
+                ),
+              ),
+              contentPadding: const EdgeInsets.all(20),
+              border: const OutlineInputBorder(
+                borderSide: BorderSide(
+                  width: 5,
+                ),
+                borderRadius: BorderRadius.all(
+                  Radius.circular(50),
+                ),
+              ),
+              enabledBorder: const OutlineInputBorder(
+                borderSide: BorderSide(
+                  width: 2,
+                  color: outalmaMainBlue,
+                ),
+                borderRadius: BorderRadius.all(
+                  Radius.circular(50),
+                ),
+              ),
+              labelText: 'Mot de passe',
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
   _loginOrRegister() {
     if (isLoginActive) {
-      Navigator.of(context).pushReplacement(
-        MaterialPageRoute(
-          builder: (BuildContext context) => const OverviewScreen(),
-        ),
-      );
+      if (loginKey.currentState!.validate()) {
+        Navigator.of(context).pushReplacement(
+          MaterialPageRoute(
+            builder: (BuildContext context) => const OverviewScreen(),
+          ),
+        );
+      }
     } else {
       if (!isTermsConditionsChecked) return;
       Navigator.of(context).pushReplacement(
